@@ -75,6 +75,7 @@ This course provides a graduate-level introduction to machine learning, covering
 University of Michigan  
 huyle@umich.edu
 
----
+## License
 
-*Note: This repository is for educational purposes. Please adhere to the University of Michigan's academic integrity policies.*
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
