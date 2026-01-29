@@ -50,7 +50,7 @@ def compute_objective(X: np.ndarray, y: np.ndarray, w: np.ndarray) -> float:
     # You need to pass the output to the 'objective' variable
     # (i.e., objective = the_final_value_from_your_end )
     ###################################################################
-    objective = np.sum(np.square(X @ w - y)) / (2 * len(y))
+    objective = np.sum(np.square(X @ w - y)) / 2
     ###################################################################
     #                        END OF YOUR CODE                         #
     ###################################################################
