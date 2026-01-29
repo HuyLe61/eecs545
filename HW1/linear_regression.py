@@ -50,7 +50,7 @@ def compute_objective(X: np.ndarray, y: np.ndarray, w: np.ndarray) -> float:
     # You need to pass the output to the 'objective' variable
     # (i.e., objective = the_final_value_from_your_end )
     ###################################################################
-    raise NotImplementedError("TODO: Add your implementation here.")
+    objective = np.sum(np.square(X @ w - y)) / (2 * len(y))
     ###################################################################
     #                        END OF YOUR CODE                         #
     ###################################################################
@@ -91,7 +91,7 @@ def batch_gradient_descent(
         # In this block, you have X_train and y_train. 
         # From those train set data, you are required to update the weight 'w' 
         ###################################################################
-        raise NotImplementedError("TODO: Add your implementation here.")
+        w = w - eta * (X_train.T @ (X_train @ w - y_train)) 
         ###################################################################
         #                        END OF YOUR CODE                         #
         ###################################################################
@@ -138,7 +138,7 @@ def stochastic_gradient_descent(
             # In this block, you are required to update w from a single 
             # (x_data_point, y_data_point).
             ###################################################################
-            raise NotImplementedError("TODO: Add your implementation here.")
+            w = w - eta * (x_data_point @ w - y_data_point) * x_data_point
             ###################################################################
             #                        END OF YOUR CODE                         #
             ###################################################################
@@ -176,7 +176,7 @@ def closed_form(
     # TODO: Implement the closed form solution.
     # Your final outcome needs to be passed to w.
     ###################################################################
-    raise NotImplementedError("TODO: Add your implementation here.")
+    w = np.linalg.inv(X_train.T @ X_train + reg * np.eye(X_train.shape[1])) @ X_train.T @ y_train 
     ###################################################################
     #                        END OF YOUR CODE                         #
     ###################################################################
@@ -212,7 +212,9 @@ def compute_rms_for_m(x_train, y_train, x_test, y_test,
     # Among various optimization methods, we will use 'closed_form' approach.
     # You may want to see the previous cells.
     #########################################################################
-    raise NotImplementedError("TODO: Add your implementation here.")
+    X_train_m = generate_polynomial_features(x_train, M=degree + 1) 
+    X_test_m = generate_polynomial_features(x_test, M=degree + 1) 
+    w_m = closed_form(X_train_m, y_train, reg=reg) 
     #########################################################################
     #                          END OF YOUR CODE                             #
     #########################################################################
@@ -247,7 +249,9 @@ def closed_form_locally_weighted(
     ###################################################################
     # TODO: Implement the closed form solution.
     ###################################################################
-    raise NotImplementedError("TODO: Add your implementation here.")
+    R = 1/2 * np.diag(r_train)  
+    w = np.linalg.inv(X_train.T @ R @ X_train) @ X_train.T @ R @ y_train 
+
     ###################################################################
     #                        END OF YOUR CODE                         #
     ###################################################################
@@ -276,6 +280,8 @@ def compute_y_space(
         locally weighted linear regression y_space values of shape (K, ). Each item in this list are matched with x_space of the same index position.
     """
     y_space = np.zeros_like(x_space)
+    M = X_train.shape[1]  
+
     for idx, x_point in enumerate(x_space):
         #########################################################################
         # TODO: Compute y_space value matched to each x_space item.             #
@@ -283,7 +289,10 @@ def compute_y_space(
         # And then, you can compute y_space (y_space[idx]) for the x_point with #
         # w value from the previous step.                                       #
         #########################################################################
-        raise NotImplementedError("TODO: Add your implementation here.")
+        r = np.exp(-(x_point - x_train)**2 / (2 * tau**2))
+        w = closed_form_locally_weighted(X_train, y_train, r)
+        x_point_features = np.power(x_point, np.arange(M))
+        y_space[idx] = x_point_features @ w
         #########################################################################
         #                          END OF YOUR CODE                             #
         #########################################################################
